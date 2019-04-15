@@ -49,11 +49,151 @@ describe Board do
         break if idx == num_opposite_marker
       end
     end
-
     numbers = numbers.drop(num_opposite_marker)
     numbers.each_with_index do |n, idx|
       @board.vertex_list[7 * row + n].marker = "X"
       break if idx == 3
+    end
+  end
+
+  def fill_diagonal_up_right_to_win(origin, num_opposite_marker)
+    numbers = [0, 8, 16, 24, 32, 40]
+    unless num_opposite_marker.zero?
+      numbers.each_with_index do |n, idx|
+        @board.vertex_list[origin + n].marker = "O"
+        break if idx == num_opposite_marker
+      end
+    end
+    numbers = numbers.drop(num_opposite_marker)
+    numbers.each_with_index do |n, idx|
+      @board.vertex_list[origin + n].marker = "X"
+      break if idx == 3 || @board.vertex_list.index(@board.vertex_list[origin + n]) > 35 || @board.vertex_list.index(@board.vertex_list[origin + n]) % 7 == 6
+    end
+  end
+  
+  def fill_diagonal_up_left_to_win(origin, num_opposite_marker)
+    numbers = [0, 6, 12, 18, 24, 30]
+    unless num_opposite_marker.zero?
+      numbers.each_with_index do |n, idx|
+        @board.vertex_list[origin + n].marker = "O"
+        break if idx == num_opposite_marker
+      end
+    end
+    numbers = numbers.drop(num_opposite_marker)
+    numbers.each_with_index do |n, idx|
+      @board.vertex_list[origin + n].marker = "X"
+      break if idx == 3 || @board.vertex_list.index(@board.vertex_list[origin + n]) > 35 || @board.vertex_list.index(@board.vertex_list[origin + n]) % 7 == 0
+    end
+  end
+
+  describe "#diagonal_up_left_win?" do
+    context "returns true if there are 4 in a row diagonally in an up left pattern" do
+      it "begin from last column" do
+        fill_diagonal_up_left_to_win(6, 0)
+        @board.print_board
+        expect(@board.diagonal_up_left_win?).to be true
+      end
+    end
+
+    context "returns true if there are 4 in a row diagonally in an up left pattern" do
+      it "begin from last column" do
+        fill_diagonal_up_left_to_win(6, 1)
+        @board.print_board
+        expect(@board.diagonal_up_left_win?).to be true
+      end
+    end
+
+    context "returns true if there are 4 in a row diagonally in an up left pattern" do
+      it "begin from last column" do
+        fill_diagonal_up_left_to_win(6, 2)
+        @board.print_board
+        expect(@board.diagonal_up_left_win?).to be true
+      end
+    end
+
+    context "returns true if there are 4 in a row diagonally in an up left pattern" do
+      it "begin from last column" do
+        fill_diagonal_up_left_to_win(6, 3)
+        @board.print_board
+        expect(@board.diagonal_up_left_win?).to be false
+      end
+    end
+  end
+
+  describe "#diagonal_up_right_win?" do
+    context "returns true if there are 4 in a row diagonally in an up right pattern" do
+      [0, 7, 14].each do |n|
+        it "From #{n}th position" do
+          fill_diagonal_up_right_to_win(n, 0)
+          expect(@board.diagonal_up_right_win?).to be true
+        end
+      end
+    end
+
+    context "returns true if there is 1 other marker in a row where there are 4 in a row diagonally in an up right pattern" do
+      [0, 7].each do |n|
+        it "from #{n}th position" do
+          fill_diagonal_up_right_to_win(n, 1)
+          expect(@board.diagonal_up_right_win?).to be true
+        end
+      end
+    end
+
+    context "returns true if if there are 2 other markers in a row where there are 4 in a row diagonally in an up right pattern" do
+      it "from 0th position" do
+        fill_diagonal_up_right_to_win(0, 2)
+        expect(@board.diagonal_up_right_win?).to be true
+      end
+    end
+
+    context "returns true if there are 4 in a row diagonally in an up right pattern" do
+      [1, 2, 3].each do |n|
+        it "from position #{n}" do
+          fill_diagonal_up_right_to_win(n, 0)
+          expect(@board.diagonal_up_right_win?).to be true
+        end
+      end
+    end
+
+    context "returns true if there is 1 other marker in a row where there are 4 in a row diagonally in an up right pattern" do
+      [1, 2].each do |n|
+        it "from position #{n}" do
+          fill_diagonal_up_right_to_win(n, 1)
+          expect(@board.diagonal_up_right_win?).to be true
+        end
+      end
+    end
+
+    context "returns true if there are 1 other markers in a row where there are 4 in a row diagonally in an up right pattern" do
+      [1].each do |n|
+        it "from position #{n}" do
+          fill_diagonal_up_right_to_win(n, 2)
+          expect(@board.diagonal_up_right_win?).to be true
+        end
+      end
+    end
+
+    context "returns false if there are not 4 in a row diagonally in an up right pattern" do
+      [0, 7, 14].each do |n|
+        it "from #{n}th position" do
+          fill_diagonal_up_right_to_win(n, 3)
+          expect(@board.diagonal_up_right_win?).to be false
+        end
+      end
+
+      [1].each do |n|
+        it "from position #{n}" do
+          fill_diagonal_up_right_to_win(n, 3)
+          expect(@board.diagonal_up_right_win?).to be false
+        end
+      end
+
+      [2, 3].each do |n|
+        it "from position #{n}" do
+          fill_diagonal_up_right_to_win(n, 2)
+          expect(@board.diagonal_up_right_win?).to be false
+        end
+      end
     end
   end
 
