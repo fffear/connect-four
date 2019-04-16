@@ -1,8 +1,9 @@
-require './board_tiles.rb'
-require './vertical_win.rb'
-require './horizontal_win.rb'
-require './diagonal_up_right_win.rb'
-require './diagonal_up_left_win.rb'
+$LOAD_PATH << '.'
+require 'board_tiles.rb'
+require 'vertical_win.rb'
+require 'horizontal_win.rb'
+require 'diagonal_up_right_win.rb'
+require 'diagonal_up_left_win.rb'
 
 class Board
   attr_accessor :board, :vertex_list, :adjacency_list
@@ -125,18 +126,18 @@ class Board
 end
 
 
-test = Board.new
-test.create_vertex_list
-test.create_adjacency_list
-test.print_board
-
-test.vertex_list[6].marker = "X"
-test.vertex_list[41].marker = "O"
-test.vertex_list[35].marker = "K"
-
-
-test.print_board
-test.adjacency_list[0].each do |v| puts v end
+#test = Board.new
+#test.create_vertex_list
+#test.create_adjacency_list
+#test.print_board
+#
+#test.vertex_list[6].marker = "X"
+#test.vertex_list[41].marker = "O"
+#test.vertex_list[35].marker = "K"
+#
+#
+#test.print_board
+#test.adjacency_list[0].each do |v| puts v end
 
 #p test.vertex_list[4].marker = "X"
 #test.vertex_list[0].marker = "X"
