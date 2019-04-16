@@ -88,34 +88,58 @@ describe Board do
 
   describe "#diagonal_up_left_win?" do
     context "returns true if there are 4 in a row diagonally in an up left pattern" do
-      it "begin from last column" do
-        fill_diagonal_up_left_to_win(6, 0)
-        @board.print_board
-        expect(@board.diagonal_up_left_win?).to be true
+      [3, 4, 5, 6, 13, 20].each do |n|
+        it "begin from position #{n}" do
+          fill_diagonal_up_left_to_win(n, 0)
+          @board.print_board
+          expect(@board.diagonal_up_left_win?).to be true
+        end
       end
     end
 
-    context "returns true if there are 4 in a row diagonally in an up left pattern" do
-      it "begin from last column" do
-        fill_diagonal_up_left_to_win(6, 1)
-        @board.print_board
-        expect(@board.diagonal_up_left_win?).to be true
+    context "returns true if there is 1 other marker in a row where there are 4 in a row diagonally in an up left pattern" do
+      [4, 5, 6, 13].each do |n|
+        it "begin from position #{n}" do
+          fill_diagonal_up_left_to_win(n, 1)
+          @board.print_board
+          expect(@board.diagonal_up_left_win?).to be true
+        end
       end
     end
 
-    context "returns true if there are 4 in a row diagonally in an up left pattern" do
-      it "begin from last column" do
-        fill_diagonal_up_left_to_win(6, 2)
-        @board.print_board
-        expect(@board.diagonal_up_left_win?).to be true
+    context "returns true if there are 2 other markers in a row where there are 4 in a row diagonally in an up left pattern" do
+      (5..6).each do |n|
+        it "begin from position #{n}" do
+          fill_diagonal_up_left_to_win(n, 2)
+          @board.print_board
+          expect(@board.diagonal_up_left_win?).to be true
+        end
       end
     end
 
-    context "returns true if there are 4 in a row diagonally in an up left pattern" do
-      it "begin from last column" do
-        fill_diagonal_up_left_to_win(6, 3)
-        @board.print_board
-        expect(@board.diagonal_up_left_win?).to be false
+    context "returns false if there are not 4 in a row diagonally in an up left pattern" do
+      [4, 13].each do |n|
+        it "begin from position #{n}" do
+          fill_diagonal_up_left_to_win(n, 2)
+          @board.print_board
+          expect(@board.diagonal_up_left_win?).to be false
+        end
+      end
+
+      [3, 20].each do |n|
+        it "begin from position #{n}" do
+          fill_diagonal_up_left_to_win(n, 1)
+          @board.print_board
+          expect(@board.diagonal_up_left_win?).to be false
+        end
+      end
+
+      [5, 6].each do |n|
+        it "begin from column #{n}" do
+          fill_diagonal_up_left_to_win(n, 3)
+          @board.print_board
+          expect(@board.diagonal_up_left_win?).to be false
+        end
       end
     end
   end

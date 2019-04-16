@@ -2,6 +2,7 @@ require './board_tiles.rb'
 require './vertical_win.rb'
 require './horizontal_win.rb'
 require './diagonal_up_right_win.rb'
+require './diagonal_up_left_win.rb'
 
 class Board
   attr_accessor :board, :vertex_list, :adjacency_list
@@ -28,6 +29,10 @@ class Board
   end
 
   #victory conditions
+  def victory?
+    vertical_win? || horizontal_win? || diagonal_win?
+  end
+
   def vertical_win?
     VerticalWin.new(vertex_list, adjacency_list).compute
   end
@@ -36,145 +41,16 @@ class Board
     HorizontalWin.new(vertex_list, adjacency_list).compute
   end
 
-  def diagonal_up_left_win?
-    count = 0
-    current_vertex = vertex_list[6]
-    current_pointer_in_adjacency_list = adjacency_list[6]
-    count += 1 if current_vertex.marker != " "
+  def diagonal_win?
+    diagonal_up_left_win? || diagonal_up_right_win?
+  end
 
-    until vertex_list.index(current_vertex) >= 35
-      current_pointer_in_adjacency_list.each do |vertex|
-        if vertex.coordinates[1] == current_vertex.coordinates[1] + 1 && vertex.coordinates[0] == current_vertex.coordinates[0] - 1
-          count += 1 if current_vertex.marker == vertex.marker && vertex.marker != " "
-          count = 1 if current_vertex.marker != vertex.marker
-          idx_num = vertex_list.index(vertex)
-          current_vertex = vertex_list[idx_num]
-          current_pointer_in_adjacency_list = adjacency_list[idx_num]
-          p "This is the current vertex: #{current_vertex}"
-          p "This is the current pointer in adjacency list: #{current_pointer_in_adjacency_list}"
-          puts "The count is #{count}"
-          break
-        end
-      end
-      return true if count == 4
-      #break if count != 4
-    end
-    false
+  def diagonal_up_left_win?
+    DiagonalUpLeftWin.new(vertex_list, adjacency_list).compute
   end
 
   def diagonal_up_right_win?
     DiagonalUpRightWin.new(vertex_list, adjacency_list).compute
-    #[0, 7, 14].each do |n|
-    #  count = 0
-    #  current_vertex = vertex_list[n]
-    #  current_pointer_in_adjacency_list = adjacency_list[n]
-    #  count += 1 if current_vertex.marker != " "
-#
-    #  until vertex_list.index(current_vertex) >= 35
-    #    current_pointer_in_adjacency_list.each do |vertex|
-    #      if vertex.coordinates[1] == current_vertex.coordinates[1] + 1 && vertex.coordinates[0] == current_vertex.coordinates[0] + 1
-    #        count += 1 if current_vertex.marker == vertex.marker && vertex.marker != " "
-    #        count = 1 if current_vertex.marker != vertex.marker
-    #        idx_num = vertex_list.index(vertex)
-    #        current_vertex = vertex_list[idx_num]
-    #        current_pointer_in_adjacency_list = adjacency_list[idx_num]
-    #        p "This is the current vertex: #{current_vertex}"
-    #        p "This is the current pointer in adjacency list: #{current_pointer_in_adjacency_list}"
-    #        puts "The count is #{count}"
-    #        break
-    #      end
-    #    end
-    #    return true if count == 4
-    #    #break if count != 4
-    #  end
-    #end
-#
-    #[1, 2, 3].each do |n|
-    #  count = 0
-    #  current_vertex = vertex_list[n]
-    #  current_pointer_in_adjacency_list = adjacency_list[n]
-    #  count += 1 if current_vertex.marker != " "
-#
-    #  until vertex_list.index(current_vertex) % 7 == 6
-    #    current_pointer_in_adjacency_list.each do |vertex|
-    #      if vertex.coordinates[1] == current_vertex.coordinates[1] + 1 && vertex.coordinates[0] == current_vertex.coordinates[0] + 1
-    #        count += 1 if current_vertex.marker == vertex.marker && vertex.marker != " "
-    #        count = 1 if current_vertex.marker != vertex.marker
-    #        idx_num = vertex_list.index(vertex)
-    #        current_vertex = vertex_list[idx_num]
-    #        current_pointer_in_adjacency_list = adjacency_list[idx_num]
-    #        p "This is the current vertex: #{current_vertex}"
-    #        p "This is the current pointer in adjacency list: #{current_pointer_in_adjacency_list}"
-    #        puts "The count is #{count}"
-    #        break
-    #      end
-    #    end
-    #    return true if count == 4
-    #    #break if count != 4
-    #  end
-    #end
-    #false
-#
- #[0, 7, 14, 21, 28, 35].each do |n|
-    #  count = 0
-#
-    #  current_vertex = vertex_list[n]
-    #  current_pointer_in_adjacency_list = adjacency_list[n]
-    #  count += 1 if current_vertex.marker != " "
-#
-    #  until vertex_list.index(current_vertex) == 6
-    #    current_pointer_in_adjacency_list.each do |vertex|
-    #      if vertex.coordinates[1] == current_vertex.coordinates[1] && vertex.coordinates[0] == current_vertex.coordinates[0] + 1
-    #        count += 1 if current_vertex.marker == vertex.marker && vertex.marker != " "
-    #        count = 1 if current_vertex.marker != vertex.marker
-    #        idx_num = vertex_list.index(vertex)
-    #        current_vertex = vertex_list[idx_num]
-    #        current_pointer_in_adjacency_list = adjacency_list[idx_num]
-    #        p "This is the current vertex: #{current_vertex}"
-    #        p "This is the current pointer in adjacency list: #{current_pointer_in_adjacency_list}"
-    #        puts "The count is #{count}"
-    #        break
-    #      end
-    #    end
-    #    break if count == 4
-    #    break if vertex_list.index(current_vertex) % 7 == 6 && count != 4
-    #  end
-    #  return true if count == 4
-    #end
-    #false
-
-
-
-            #(0..6).each do |n|
-    #  count = 0
-#
-    #  current_vertex = vertex_list[n]
-    #  next if current_vertex.marker == " "
-    #  current_pointer_in_adjacency_list = adjacency_list[n]
-    #  count += 1 if current_vertex.marker != " "
-#
-    #  until current_vertex.marker == " "
-    #    current_pointer_in_adjacency_list.each do |vertex|
-    #      if vertex.coordinates[1] == current_vertex.coordinates[1] + 1 && vertex.coordinates[0] == current_vertex.coordinates[0] 
-    #        count += 1 if current_vertex.marker == vertex.marker
-    #        count = 1 if current_vertex.marker != vertex.marker
-    #        idx_num = vertex_list.index(vertex)
-    #        current_vertex = vertex_list[idx_num]
-    #        current_pointer_in_adjacency_list = adjacency_list[idx_num]
-    #        #p "This is the current vertex: #{current_vertex}"
-    #        #p "This is the current pointer in adjacency list: #{current_pointer_in_adjacency_list}"
-    #        #puts "The count is #{count}"
-    #        break
-    #      end
-    #    end
-    #    break if vertex_list.index(current_vertex) >= 35 && count != 4
-    #    #break
-    #    #puts "The count is #{count}"
-    #    return true if count == 4
-    #  end
-    #end
-#
-    #false
   end
 
   private
@@ -241,10 +117,6 @@ class Board
 
   def print_individual_row
     lambda { |n| puts (n.zero?) ? "#{row_separator}\n#{column_numbers}" : "#{row_separator}\n#{generate_row(n - 1)}" }
-  end
-
-  def count_is_4
-    Proc.new { return true if @count == 4 }
   end
 end
 
