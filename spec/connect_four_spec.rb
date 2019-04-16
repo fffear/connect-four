@@ -86,12 +86,34 @@ describe Board do
     end
   end
 
+  def fill_board_to_draw
+    (0..41).each do |n|
+      @board.vertex_list[n].marker = "O" if (n % 7).even? && n <= 20 || (n % 7).odd? && n > 20
+      @board.vertex_list[n].marker = "X" if (n % 7).odd? && n <= 20 || (n % 7).even? && n > 20
+    end
+    
+  end
+
+  describe "draw?" do
+    it "returns false when there is no 4 in a row, and there are still blank tiles." do
+      fill_board_to_draw
+      @board.vertex_list[35].marker = " "
+      @board.print_board
+      expect(@board.draw?).to be false
+    end
+
+    it "returns true when there are no 4 in a row, and there are no blank tiles." do
+      fill_board_to_draw
+      @board.print_board
+      expect(@board.draw?).to be true
+    end
+  end
+
   describe "#diagonal_up_left_win?" do
     context "returns true if there are 4 in a row diagonally in an up left pattern" do
       [3, 4, 5, 6, 13, 20].each do |n|
         it "begin from position #{n}" do
           fill_diagonal_up_left_to_win(n, 0)
-          @board.print_board
           expect(@board.diagonal_up_left_win?).to be true
         end
       end
@@ -101,7 +123,6 @@ describe Board do
       [4, 5, 6, 13].each do |n|
         it "begin from position #{n}" do
           fill_diagonal_up_left_to_win(n, 1)
-          @board.print_board
           expect(@board.diagonal_up_left_win?).to be true
         end
       end
@@ -111,7 +132,6 @@ describe Board do
       (5..6).each do |n|
         it "begin from position #{n}" do
           fill_diagonal_up_left_to_win(n, 2)
-          @board.print_board
           expect(@board.diagonal_up_left_win?).to be true
         end
       end
@@ -121,7 +141,6 @@ describe Board do
       [4, 13].each do |n|
         it "begin from position #{n}" do
           fill_diagonal_up_left_to_win(n, 2)
-          @board.print_board
           expect(@board.diagonal_up_left_win?).to be false
         end
       end
@@ -129,7 +148,6 @@ describe Board do
       [3, 20].each do |n|
         it "begin from position #{n}" do
           fill_diagonal_up_left_to_win(n, 1)
-          @board.print_board
           expect(@board.diagonal_up_left_win?).to be false
         end
       end
@@ -137,7 +155,6 @@ describe Board do
       [5, 6].each do |n|
         it "begin from column #{n}" do
           fill_diagonal_up_left_to_win(n, 3)
-          @board.print_board
           expect(@board.diagonal_up_left_win?).to be false
         end
       end

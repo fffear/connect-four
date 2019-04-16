@@ -53,6 +53,10 @@ class Board
     DiagonalUpRightWin.new(vertex_list, adjacency_list).compute
   end
 
+  def draw?
+    (41).downto(0).none? { |n| vertex_list[n].marker == " " } && !victory?
+  end
+
   private
   # query and helper functions to create adjacency list
   def top_row?(n)
